@@ -8,9 +8,9 @@ namespace ToDoList
 {
   public class Startup
   {
-    public Startup(IWebHostEnviroment env)
+    public Startup(IWebHostEnvironment env)
     {
-      vara builder = new ConfigurationBuilder()
+      var builder = new ConfigurationBuilder()
         .SetBasePath(env.ContentRootPath)
         .AddEnvironmentVariables();
         Configuration = builder.Build();
