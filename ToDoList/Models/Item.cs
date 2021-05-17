@@ -8,7 +8,7 @@ namespace ToDoList.Models
     public string Description { get; set; }
     private static List<Item> _instances = new List<Item> { };
 
-    public int Id { get; }
+    public int Id { get; set; }
 
     public Item(string description)
     {
@@ -30,8 +30,9 @@ namespace ToDoList.Models
       else
       {
         Item newItem = (Item) otherItem;
+        bool idEquality = (this.Id == newItem.Id);
         bool descriptionEquality = (this.Description == newItem.Description);
-        return descriptionEquality;
+        return (idEquality && descriptionEquality);
       }
     }
 
@@ -77,6 +78,31 @@ namespace ToDoList.Models
       // Temporarily returning placeholder item to get beyond compiler errors until we refactor to work with database.
       Item placeholderItem = new Item("placeholder item");
       return placeholderItem;
+    }
+
+    public void Save()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+
+      // Begin new code
+
+      cmd.CommandText = @"INSERT INTO items (description) VALUES (@ItemDescription);";
+      MySqlParameter description = new MySqlParameter();
+      description.ParameterName = "@ItemDescription";
+      description.Value = this.Description;
+      cmd.Parameters.Add(description);    
+      cmd.ExecuteNonQuery();
+      Id = (int) cmd.LastInsertedId;
+
+      // End new code
+
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
     }
   }
 }
