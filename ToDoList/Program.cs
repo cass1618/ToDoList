@@ -12,10 +12,9 @@ namespace ToDoList
         .UseContentRoot(Directory.GetCurrentDirectory())
         .UseIISIntegration()
         .UseStartup<Startup>()
-        .UseUrls("http://localhost:5201/")
         .Build();
 
-      host.Run();  
+      host.Run();
     }
   }
 }
